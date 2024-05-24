@@ -145,6 +145,7 @@ h1 {
 
 .model-reports {
   	font-family: 'Calibri', sans-serif;
+  	font-size: 0.3rem;
     display: none;
     text-align: left;
     margin-left: auto;
