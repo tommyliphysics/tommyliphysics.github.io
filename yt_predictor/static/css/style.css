@@ -16,6 +16,8 @@ body {
 .flex-container {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content:center;
     width: 100%;
     margin-left: auto;
     margin-right: auto;
@@ -38,11 +40,12 @@ h1 {
     padding: 0px;
 }
 .input {
-	font-family: 'Calibri', sans-serif;
+  	font-family: 'Calibri', sans-serif;
     font-size: 12pt;
     padding: 5px;
     margin: 10px auto;
     text-align: left;
+    width: 100%;
 }
 
 .dropdown {
@@ -51,17 +54,18 @@ h1 {
 }
 
 .dropdown-button {
+    display:inline-block;
     border: none;
-    padding: 10px 15px;
+    padding: 10px 40px;
     font-size: 14px;
     cursor: pointer;
     background-color: #ddddea;
-    margin: 2px 3px auto;
+/*    margin: 2px 3px auto; */
     transition: transform 0.5s ease; /* Apply transition to the transform property */
 }
 
 .dropdown-content {
-    font-size: 11pt;
+    font-size: 9pt;
     display: none;
     position: absolute;
     background-color: #ffffff;
@@ -73,7 +77,7 @@ h1 {
 
 .dropdown-option {
     display: block;
-    padding: 10px 15px;
+    padding: 4px 4px;
     text-decoration: none;
     color: #333333;
     background-color: #eeeeff;
@@ -83,13 +87,12 @@ h1 {
 .button {
     display: inline-block;
     border: 2px #eef;
-    padding: 15px 32px;
+    padding: 10px 40px;
     text-align: center;
     text-decoration: none;
     font-size: 18px;
-    margin: 4px 12px auto;
+/*    margin: 4px 12px auto; */
     cursor: pointer;
-    width: 100%;
     background-color: #ddddea;
 }
 
@@ -112,7 +115,7 @@ h1 {
         font-weight: bold;
         text-align: left;
     }
-    td{
+    td {
         text-align: center;
         color: #f00;
     }
@@ -142,11 +145,11 @@ h1 {
 }
 
 .collapsible {
-    padding: 15px 32px;
-    margin-left: auto;
-    margin-right: auto;
-    cursor: pointer;
     display: inline-block;
+    padding: 10px 40px;
+/*    margin-left: auto;
+    margin-right: auto; */
+    cursor: pointer;
     font-size: 18px;
     border: 2px #eef;
     text-align: center;
