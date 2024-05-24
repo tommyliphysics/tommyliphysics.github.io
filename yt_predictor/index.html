@@ -15,7 +15,7 @@
 Enter your video details below to see the predictions. The models were trained on a collection of 31662 videos published between January 2018 and April 2024 obtained through an API search with the keywords: 'engineering', 'technology', 'computers', 'maths', 'physics', 'biology', 'chemistry', 'statistics', 'medicine.' The app is expected to perform best when your video is related to one of these topics.
         </div>
 
-        <div class="flex-container" style= "margin-bottom:20vh;">
+        <div class="flex-container">
             <div class="flex-container" style="width: 50%; height: 40%; margin-bottom: 15px;">
                 <textarea class="input" id = "channelTitle" placeholder = "Enter channel name"></textarea>
                 <textarea class="input" id = "videoTitle" placeholder = "Enter video title"></textarea>
@@ -146,7 +146,9 @@ Enter your video details below to see the predictions. The models were trained o
     </script>
 
         <div class="flex-container">
-            <button class="collapsible" onclick="showAbout('about')">Learn about the models</button>
+            <div class="flex-container" style="margin-top:20px; margin-bottom:20px">
+                <button class="collapsible" onclick="showAbout('about')">Learn about the models</button>
+            </div>
             <div id="about" class = "model-reports" style = "width: 60%; margin-bottom: 10vh;">
                 <div style="padding:36px;">
 <b>About the models</b>
