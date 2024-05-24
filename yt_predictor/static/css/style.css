@@ -141,8 +141,9 @@ h1 {
 
 .model-reports {
     h1 {
-        font-size: 14pt;
+        font-size: 15pt;
     }
+  	font-family: 'Calibri', sans-serif;
     display: none;
     text-align: left;
     margin-left: auto;
@@ -194,6 +195,6 @@ table {
 
 @media only screen and (max-width: 768px) {
   .flex-parent {
-    width:90%;
+    width:75%;
   }
 }
