@@ -50,6 +50,7 @@ Enter your video details below to see the predictions. The models were trained o
         </div>
 
         <div id="predictionsDiv" class="flex-container" style = "width:100%; margin-top: 20px; margin-bottom: 20px;"></div>
+
     <script>
         var inputVideoCategory = 0;
         var videoCategoryName = "";
@@ -62,6 +63,7 @@ Enter your video details below to see the predictions. The models were trained o
                 dropdownContent.style.display = "none";
             }
         }
+
         function selectVideoCategory(option, title) {
             var selectedVideoCategory = document.getElementById('selectedVideoCategory');
             selectedVideoCategory.textContent=title;
@@ -82,19 +84,19 @@ Enter your video details below to see the predictions. The models were trained o
                 }
             }
         }
-        
-        function getVideoDetails() {            
+
+        function getVideoDetails() {
             var inputChannelTitle = document.getElementById('channelTitle').value;
             var inputVideoTitle = document.getElementById('videoTitle').value;
             var inputVideoDescription = document.getElementById('videoDescription').value;
 
-            var predictButton = document.getElementById("predictButton")
+            var predictButton = document.getElementById("predictButton");
             predictButton.innerHTML = "Getting predictions";
             var predictionsDiv = document.getElementById("predictionsDiv");
 
-            
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', 'https://d1vo4pzf339syj.cloudfront.net/ytpredictor?video_category=' + inputVideoCategory + '&channel_title=' + inputChannelTitle + '&video_title=' + inputVideoTitle + '&video_description=' + inputVideoDescription, true);
+            xhr.open('POST', 'https://yg8q32yhcc.execute-api.us-east-1.amazonaws.com/ytpredictor/predict', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
                     predictButton.innerHTML = "Predict";
@@ -106,8 +108,8 @@ Enter your video details below to see the predictions. The models were trained o
                         predictionsDiv.textContent = `Request failed: ${xhr.status}`;
                     }
                 }
-            };
-            xhr.send();
+            }
+            xhr.send(JSON.stringify({'video_category': inputVideoCategory, 'channel_title': inputChannelTitle, 'video_title': inputVideoTitle, 'video_description': inputVideoDescription}));
         }
 
         function displayPredictions(predictions) {
