@@ -195,6 +195,6 @@ table {
 
 @media only screen and (max-width: 768px) {
   .flex-parent {
-    width:75%;
+    width:60%;
   }
 }
