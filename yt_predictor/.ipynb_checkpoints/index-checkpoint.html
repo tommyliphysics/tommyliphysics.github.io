@@ -4,48 +4,97 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
     <title>Youtube popularity predictor</title>
 </head>
 
 <body>
-    <div class="flex-container">
-        <div class="flex-container" style="width: 50%; height: 15%; margin-bottom: 20px; text-align:center;">
+    <div class="flex-parent">
+        <div class="flex-container" style="height: 15%; margin-bottom: 20px; text-align:center;">
             <h1>Youtube popularity predictor</h1>
 Enter your video details below to see the predictions. The models were trained on a collection of 31662 videos published between January 2018 and April 2024 obtained through an API search with the keywords: 'engineering', 'technology', 'computers', 'maths', 'physics', 'biology', 'chemistry', 'statistics', 'medicine.' The app is expected to perform best when your video is related to one of these topics.
         </div>
 
-        <div class="flex-container" style= "margin-bottom:20vh;">
+        <div class="flex-container">
             <div class="flex-container" style="height: 40%; margin-bottom: 15px;">
-                <textarea class="input" id = "channelTitle" placeholder = "Enter channel name" cols = 100 rows = 2 ></textarea>
-                <textarea class="input" id = "videoTitle" placeholder = "Enter video title" cols= 100 rows=2></textarea>
-                <textarea class="input" id = "videoDescription" placeholder = "Enter video description" cols= 100 rows=8></textarea>
-                <div style="display:flex; flex-direction: row; width:100%; align-items:center; margin-left:45vw; margin-right: 45vw; font-color: #efe; font-size:18pt; font-weight:bold; text-align: center;">
-                    Video category: <textarea class="input" id = "videoCategory" cols=3 rows=1 style="margin-left:5px;"></textarea>
+                <textarea class="input" id = "channelTitle" placeholder = "Enter channel name" style="height:20px;"></textarea>
+                <textarea class="input" id = "videoTitle" placeholder = "Enter video title" style="height: 20px;"></textarea>
+                <textarea class="input" id = "videoDescription" placeholder = "Enter video description" style="height: 80px;"></textarea>
+                <div class = "dropdown" style="width: 50%; height: 25px; margin: 15px auto;">
+                    <div id="dropdownButtonContainer" style="margin: auto; justify-content:center;">
+                        <button class="dropdown-button" id="dropdownButton" onclick="toggleDropdown()">Choose video category</button>
+                        <div id="selectedVideoCategory"></div>
+                    </div>
+                    <div class="dropdown-content" id="dropdownContent">
+                        <a class="dropdown-option" onclick="selectVideoCategory('1', 'Film & Animation')">Film & Animation</a>
+                        <a class="dropdown-option" onclick="selectVideoCategory('2', 'Autos & Vehicles')">Autos & Vehicles</a>
+                        <a class="dropdown-option" onclick="selectVideoCategory('10', 'Music')">Music</a>
+                        <a class="dropdown-option" onclick="selectVideoCategory('15', 'Pets & Animals')">Pets & Animals</a>
+                        <a class="dropdown-option" onclick="selectVideoCategory('17', 'Sports')">Sports</a>
+                        <a class="dropdown-option" onclick="selectVideoCategory('19', 'Travel & Events')">Travel & Events</a>
+                        <a class="dropdown-option" onclick="selectVideoCategory('20', 'Gaming')">Gaming</a>
+                        <a class="dropdown-option" onclick="selectVideoCategory('22', 'People & Blogs')">People & Blogs</a>
+                        <a class="dropdown-option" onclick="selectVideoCategory('23', 'Comedy')">Comedy</a>
+                        <a class="dropdown-option" onclick="selectVideoCategory('24', 'Entertainment')">Entertainment</a>
+                        <a class="dropdown-option" onclick="selectVideoCategory('25', 'News & Politics')">News & Politics</a>
+                        <a class="dropdown-option" onclick="selectVideoCategory('26', 'Howto & Style')">Howto & Style</a>
+                        <a class="dropdown-option" onclick="selectVideoCategory('27', 'Education')">Education</a>
+                        <a class="dropdown-option" onclick="selectVideoCategory('28', 'Science & Technology')">Science & Technology</a>
+                        <a class="dropdown-option" onclick="selectVideoCategory('29', 'Nonprofits & Activism')">Nonprofits & Activism</a>
+                    </div>
                 </div>
-            </div>
-            <div style="width: 50%; height: 10%; margin-left: auto; margin-right: auto; margin-bottom: 15px;">
-You can find a list of video categories <a href="https://mixedanalytics.com/blog/list-of-youtube-video-category-ids/"> here </a>. Available video categories: 1,  2, 10, 15, 17, 19, 20, 22, 23, 24, 25, 26, 27, 28, 29, 30.
-            </div>
-            <div class="flex-container" style="width: 20%; height:20px; margin-bottom: 20px;">
-                <button class="button" id = "predictButton" onclick="getVideoDetails()">Predict</button></div>
-            </div>
+                <div class = "flex-container"><button class="button" id = "predictButton" onclick="getVideoDetails()" style="margin-top: 10vh">Predict</button></div>
+            </div>  
         </div>
 
         <div id="predictionsDiv" class="flex-container" style = "width:100%; margin-top: 20px; margin-bottom: 20px;"></div>
+
     <script>
+        var inputVideoCategory = 0;
+        var videoCategoryName = "";
+
+        function toggleDropdown() {
+            var dropdownContent = document.getElementById('dropdownContent');
+            if (dropdownContent.style.display === "none") {
+                dropdownContent.style.display = "block";
+            } else {
+                dropdownContent.style.display = "none";
+            }
+        }
+
+        function selectVideoCategory(option, title) {
+            var selectedVideoCategory = document.getElementById('selectedVideoCategory');
+            selectedVideoCategory.textContent=title;
+            selectedVideoCategory.style.margin="auto";
+            videoCategoryName = title;
+            inputVideoCategory=option;
+
+            var dropdownButtonContainer = document.getElementById('dropdownButtonContainer');
+            dropdownButtonContainer.style.justifyContent="space-between";
+            var dropdownButton = document.getElementById('dropdownButton');
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropdown-button')) {
+                var dropdownContent = document.getElementById("dropdownContent");
+                if (dropdownContent.style.display === "block") {
+                    dropdownContent.style.display = "none";
+                }
+            }
+        }
+
         function getVideoDetails() {
-            var predictButton = document.getElementById("predictButton")
-            predictButton.innerHTML = "Getting predictions...";
-            var predictionsDiv = document.getElementById("predictionsDiv");
-            
-            var inputVideoCategory = document.getElementById('videoCategory').value;
             var inputChannelTitle = document.getElementById('channelTitle').value;
             var inputVideoTitle = document.getElementById('videoTitle').value;
             var inputVideoDescription = document.getElementById('videoDescription').value;
 
+            var predictButton = document.getElementById("predictButton");
+            predictButton.innerHTML = "Getting predictions";
+            var predictionsDiv = document.getElementById("predictionsDiv");
+
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', 'http://192.168.1.103:5001/predict?video_category=' + inputVideoCategory + '&channel_title=' + inputChannelTitle + '&video_title=' + inputVideoTitle + '&video_description=' + inputVideoDescription, true);
+            xhr.open('POST', 'https://yg8q32yhcc.execute-api.us-east-1.amazonaws.com/ytpredictor/predict', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
                     predictButton.innerHTML = "Predict";
@@ -57,32 +106,31 @@ You can find a list of video categories <a href="https://mixedanalytics.com/blog
                         predictionsDiv.textContent = `Request failed: ${xhr.status}`;
                     }
                 }
-            };
-            xhr.send();
+            }
+            xhr.send(JSON.stringify({'video_category': inputVideoCategory, 'channel_title': inputChannelTitle, 'video_title': inputVideoTitle, 'video_description': inputVideoDescription}));
         }
 
         function displayPredictions(predictions) {
             var predictionsDiv = document.getElementById('predictionsDiv');
-            var inputVideoCategory = document.getElementById('videoCategory').value;
             var inputChannelTitle = document.getElementById('channelTitle').value;
             var inputVideoTitle = document.getElementById('videoTitle').value;
             var inputVideoDescription = document.getElementById('videoDescription').value;
 
             predictionsDiv.innerHTML = `
-            <div class = "scroll-box" style = "width: 50%; height: 7%;">
+            <div class = "scroll-box" style = "height: 7%;">
                 <b>Channel name: </b> ${inputChannelTitle}
             </div>
-            <div class = "scroll-box" style = "width: 50%; height: 7%;">
+            <div class = "scroll-box" style = "height: 7%;">
                 <b>Video title: </b> ${inputVideoTitle}
             </div>
-            <div class = "scroll-box" style = "width: 50%; height: 15%; margin-bottom: 25px;">
+            <div class = "scroll-box" style = "height: 15%; margin-bottom: 25px;">
                 <b>Video description: </b> ${inputVideoDescription}
             </div>
-            <div class = "scroll-box" style = "width: 50%; height: 7%;">
-                <b>Video category: </b> ${inputVideoCategory}
+            <div class = "scroll-box" style = "height: 7%;">
+                <b>Video category: </b> ${videoCategoryName}
             </div>
 
-            <div class = "prediction-text" style = "width: 50%; margin-bottom:7vh;">
+            <div class = "prediction-text" style = "margin-bottom:7vh;">
             <b>Will your video get over 50k views? The models predict:</b><br><br>
                 <table style="width: 100%; margin: 5px auto; text-align:left;">
                     <tr><th>Multinomial naive Bayes:</th><td>${predictions.mnB_class} (${predictions.mnB_proba})</td></tr>
@@ -98,9 +146,10 @@ You can find a list of video categories <a href="https://mixedanalytics.com/blog
     </script>
 
         <div class="flex-container">
-            <button class="collapsible" onclick="showAbout('about')" style="width:40%; margin-bottom: 10vh;">Learn about the models</button>
-            <div id="about" class = "model-reports" style = "width: 80%; margin-bottom: 10vh;">
-                <div style="padding:36px;">
+            <div class="flex-container" style="margin-top:20px; margin-bottom:20px">
+                <button class="collapsible" onclick="showAbout('about')">Learn about the models</button>
+            </div>
+            <div id="about" class = "model-reports" style = "margin-bottom: 10vh;">
 <b>About the models</b>
 <br><br>
 This app uses machine learning to estimate the probability that a YouTube video will get over 50k views from the title and description as well as the channel name and video category. I created and tested a total of 34 different machine learning models and the app shows the results of five of them.
@@ -210,8 +259,7 @@ Here are the classification reports:
 <br>
 And here are the ROC and precision-recall curves:
         <br><br>
-<img style="width: 70%; display:block; margin:auto;" src="static/roc_pr.jpg" alt = "ROC and precision-recall curves">
-                </div>
+<img style="width: 95%; display:block; margin:auto;" src="roc_pr.jpg" alt = "ROC and precision-recall curves">
             </div>
         </div>
 

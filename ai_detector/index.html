@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html >
+<!--Based on https://codepen.io/frytyler/pen/EGdtg-->
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
+    <title>AI detector</title>
+</head>
+
+<body>
+    <div class="flex-parent">
+        <div class="flex-container" style="height: 15%; margin-bottom: 20px; text-align:center;">
+            <h1>AI detector</h1>
+Enter your text below, and the model will guess if it was written by an AI or not. The model was trained and tested on a dataset consisting of 50% human and 50% AI-generated texts (GPT-3.5 Turbo, via the Open-AI API). The human-generated texts comprised IMDB reviews, introductory sections of Wikipedia articles, Reddit posts (r/AITA and r/relationship_advice), and the AI-generated texts were responses to prompts requesting IMDB reviews on specific films, Wikipedia articles on the same selection of topics as the real Wikipedia articles, and Reddit posts with the same titles as the real Reddit posts. The model performed extremely well during testing, scoring over 99% accuracy on a set of 4772 texts. It is expected to perform well on texts that are either Wikipedia articles, IMDB reviews or Reddit posts in r/AITA and r/relationship_advice, but please input whatever kind of text you please and see how well it performs (if the origin of the texts is known).
+        </div>
+
+        <div class="flex-container">
+            <div class="flex-container" style="height: 40%; margin-bottom: 15px;">
+                <textarea class="input" id = "text" placeholder = "Enter text" style="height:440px;"></textarea>
+                <div class = "flex-container"><button class="button" id = "predictButton" onclick="getPredictions()" style="margin-top: 7vh">Was this written by a human or an AI?</button></div>
+            </div>  
+        </div>
+
+        <div id="predictionsDiv" class="flex-container" style = "width:100%; margin-top: 20px; margin-bottom: 20px;"></div>
+
+    <script>
+        function getPredictions() {
+            var text = document.getElementById('text').value;
+
+            var predictButton = document.getElementById("predictButton");
+            predictButton.innerHTML = "Getting predictions";
+            var predictionsDiv = document.getElementById("predictionsDiv");
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'https://yg8q32yhcc.execute-api.us-east-1.amazonaws.com/ai_detector/predict', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    predictButton.innerHTML = "Predict";
+                    if (xhr.status === 200) {
+                        var predictionsRecv = JSON.parse(xhr.responseText);
+                        displayPredictions(predictionsRecv);
+                    } else {
+                        console.error('Request failed:', xhr.status);
+                        predictionsDiv.textContent = `Request failed: ${xhr.status}`;
+                    }
+                }
+            }
+            xhr.send(JSON.stringify({'text': text}));
+        }
+
+        function displayPredictions(predictions) {
+            var predictionsDiv = document.getElementById('predictionsDiv');
+            var text = document.getElementById('text').value;
+
+            predictionsDiv.innerHTML = `
+            <div class = "scroll-box" style = "height: 7%;">
+                <b>Text: </b> ${text}
+            </div>
+            <div class = "prediction-text" style = "margin-bottom:7vh;">
+                <b>Result: </b> ${predictions.distilbert_class} with probability: ${predictions.distilbert_proba}%.
+            </div>
+                `;
+            predictionsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } 
+    </script>
+
+    </div>
+</body>
+</html>
