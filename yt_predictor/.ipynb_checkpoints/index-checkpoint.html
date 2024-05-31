@@ -117,16 +117,16 @@ Enter your video details below to see the predictions. The models were trained o
             var inputVideoDescription = document.getElementById('videoDescription').value;
 
             predictionsDiv.innerHTML = `
-            <div class = "scroll-box" style = "height: 7%;">
+            <div class = "scroll-box" style = "max-height: 50px;">
                 <b>Channel name: </b> ${inputChannelTitle}
             </div>
-            <div class = "scroll-box" style = "height: 7%;">
+            <div class = "scroll-box" style = "max-height: 50px;">
                 <b>Video title: </b> ${inputVideoTitle}
             </div>
-            <div class = "scroll-box" style = "height: 15%; margin-bottom: 25px;">
+            <div class = "scroll-box" style = "max-height: 100px; margin-bottom: 25px;">
                 <b>Video description: </b> ${inputVideoDescription}
             </div>
-            <div class = "scroll-box" style = "height: 7%;">
+            <div class = "scroll-box" style = "max-height: 50px;">
                 <b>Video category: </b> ${videoCategoryName}
             </div>
 
