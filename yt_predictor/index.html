@@ -112,22 +112,19 @@ Enter your video details below to see the predictions. The models were trained o
 
         function displayPredictions(predictions) {
             var predictionsDiv = document.getElementById('predictionsDiv');
-            var inputChannelTitle = document.getElementById('channelTitle').value;
-            var inputVideoTitle = document.getElementById('videoTitle').value;
-            var inputVideoDescription = document.getElementById('videoDescription').value;
-
+            var inputChannelTitle = document.getElementById('channelTitle');
+            var inputVideoTitle = document.getElementById('videoTitle');
+            var inputVideoDescription = document.getElementById('videoDescription');
+            
             predictionsDiv.innerHTML = `
             <div class = "scroll-box" style = "max-height: 50px;">
-                <b>Channel name: </b> ${inputChannelTitle}
+                <b>Channel name: </b> ${inputChannelTitle.value}
             </div>
             <div class = "scroll-box" style = "max-height: 50px;">
-                <b>Video title: </b> ${inputVideoTitle}
+                <b>Video title: </b> ${inputVideoTitle.value}
             </div>
             <div class = "scroll-box" style = "max-height: 100px; margin-bottom: 25px;">
-                <b>Video description: </b> ${inputVideoDescription}
-            </div>
-            <div class = "scroll-box" style = "max-height: 50px;">
-                <b>Video category: </b> ${videoCategoryName}
+                <b>Video description: </b> ${inputVideoDescription.value}
             </div>
 
             <div class = "prediction-text" style = "margin-bottom:7vh;">
@@ -142,6 +139,10 @@ Enter your video details below to see the predictions. The models were trained o
             </div>
                 `;
             predictionsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            inputChannelTitle.value = '';
+            inputVideoTitle.value = '';
+            inputVideoDescription.value = '';
+
         } 
     </script>
 

@@ -52,17 +52,17 @@ Enter your text below, and the model will guess if it was written by an AI or no
 
         function displayPredictions(predictions) {
             var predictionsDiv = document.getElementById('predictionsDiv');
-            var text = document.getElementById('text').value;
 
             predictionsDiv.innerHTML = `
             <div class = "scroll-box" style = "max-height: 160px;">
-                <b>Text: </b> ${text}
+                <b>Text: </b> ${document.getElementById('text').value}
             </div>
             <div class = "prediction-text" style = "margin-bottom:7vh;">
                 <b>Result: <font color="red">${predictions.distilbert_class}</font></b> with probability: <b><font color="red">${(predictions.distilbert_proba*100).toFixed(2)}%</font></b>.
             </div>
                 `;
             predictionsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            document.getElementById('text').value = '';
         } 
     </script>
 
