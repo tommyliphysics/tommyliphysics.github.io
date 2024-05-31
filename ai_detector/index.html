@@ -59,7 +59,7 @@ Enter your text below, and the model will guess if it was written by an AI or no
                 <b>Text: </b> ${text}
             </div>
             <div class = "prediction-text" style = "margin-bottom:7vh;">
-                <b>Result: <font color="red">${predictions.distilbert_class}</font></b> with probability: <b><font color="red">${str(parseFloat(predictions.distilbert_proba)*100).toFixed(2)}%</font></b>.
+                <b>Result: <font color="red">${predictions.distilbert_class}</font></b> with probability: <b><font color="red">${(predictions.distilbert_proba*100).toFixed(2)}%</font></b>.
             </div>
                 `;
             predictionsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
