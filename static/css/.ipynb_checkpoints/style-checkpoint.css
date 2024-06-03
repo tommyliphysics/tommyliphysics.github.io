@@ -1,4 +1,9 @@
-html { width: 100%; height:100%; overflow:auto; }
+html {
+  width:100%;
+  height:100%;
+  overflow:auto;
+  font-size: 12pt;
+}
 
 
 body { 
@@ -7,15 +12,28 @@ body {
 	font-family: 'Calibri', sans-serif;
 	background: #092756;
 	color: #fff;
-	font-size: 16pt;
+	font-size: 1rem;
 	text-align:center;
 	letter-spacing:1.2px;
     background-image: linear-gradient(to right, rgba(0,50,255,0), rgba(15,150,255,0.75));
 }
 
+.flex-parent{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content:center;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0px;
+}
+
 .flex-container {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content:center;
     width: 100%;
     margin-left: auto;
     margin-right: auto;
@@ -23,7 +41,7 @@ body {
 }
 
 h1 {
-    font-size: 23pt;
+    font-size: 1.5rem;
     font-weight: bold;
 }
 
@@ -38,11 +56,11 @@ h1 {
     padding: 0px;
 }
 .input {
-	font-family: 'Calibri', sans-serif;
-    font-size: 14pt;
+  	font-family: 'Calibri', sans-serif;
     padding: 5px;
     margin: 10px auto;
     text-align: left;
+    width: 80%;
 }
 
 .dropdown {
@@ -51,17 +69,18 @@ h1 {
 }
 
 .dropdown-button {
+    display:inline-block;
     border: none;
-    padding: 10px 15px;
-    font-size: 18px;
+    padding: 10px 40px;
+    font-size: 1rem;
     cursor: pointer;
     background-color: #ddddea;
-    margin: 2px 3px auto;
+/*    margin: 2px 3px auto; */
     transition: transform 0.5s ease; /* Apply transition to the transform property */
 }
 
 .dropdown-content {
-    font-size: 11pt;
+    font-size: 0.75rem;
     display: none;
     position: absolute;
     background-color: #ffffff;
@@ -73,7 +92,7 @@ h1 {
 
 .dropdown-option {
     display: block;
-    padding: 10px 15px;
+    padding: 4px 4px;
     text-decoration: none;
     color: #333333;
     background-color: #eeeeff;
@@ -83,13 +102,12 @@ h1 {
 .button {
     display: inline-block;
     border: 2px #eef;
-    padding: 15px 32px;
+    padding: 10px 40px;
     text-align: center;
     text-decoration: none;
-    font-size: 25px;
-    margin: 4px 12px auto;
+    font-size: 1.2rem;
+/*    margin: 4px 12px auto; */
     cursor: pointer;
-    width: 100%;
     background-color: #ddddea;
 }
 
@@ -101,8 +119,7 @@ h1 {
     margin-right: auto;
     margin-bottom: 15px;
     padding: 18px;
-
-/*    background-image: linear-gradient(to bottom right, rgba(255,255,255,0.8), rgba(255,255,255,1)); */
+    width: 80%;
     text-align: left;
     overflow: auto;
 }
@@ -112,10 +129,11 @@ h1 {
         font-weight: bold;
         text-align: left;
     }
-    td{
+    td {
         text-align: center;
         color: #f00;
     }
+    width: 80%;
 
     background-color: #eef;
     margin-left: auto;
@@ -126,9 +144,9 @@ h1 {
 }
 
 .model-reports {
-    h1 {
-        font-size: 25pt;
-    }
+  	font-family: 'Calibri', sans-serif;
+  	padding: 36px;
+  	font-size: 1rem;
     display: none;
     text-align: left;
     margin-left: auto;
@@ -142,12 +160,12 @@ h1 {
 }
 
 .collapsible {
-    padding: 15px 32px;
-    margin-left: auto;
-    margin-right: auto;
-    cursor: pointer;
     display: inline-block;
-    font-size: 22px;
+    padding: 10px 40px;
+/*    margin-left: auto;
+    margin-right: auto; */
+    cursor: pointer;
+    font-size: 1.2rem;
     border: 2px #eef;
     text-align: center;
     outline: none;
@@ -176,4 +194,10 @@ table {
         text-align: center;
     }
 
+}
+
+@media only screen and (max-width: 768px) {
+  .flex-parent {
+    width:90%;
+  }
 }
