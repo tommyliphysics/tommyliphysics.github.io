@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html >
+<!--Based on https://codepen.io/frytyler/pen/EGdtg-->
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
+    <title>English literature collection</title>
+</head>
+
+<body>
+    <div class="flex-parent">
+        <div class="flex-container" style="height: 15%; margin-bottom: 20px; text-align:center;">
+            <h1>English literature collection</h1>
+<div class = "scroll-box" style = "dislay: block; height: 100%; width: 60%;"> This is a vector database of classic English literature collected from <a href="https://gutenberg.org">Project Gutenberg</a>. You can search for a phrase or add a book to the database. </div>
+        </div>
+
+        <div class="flex-container" style = "flex-direction: column; padding: 5px; width: 40%">
+            <textarea class="input" id = "queryText" placeholder = "Search phrase" style="height:40px; width: 100%"></textarea>
+            <div class="flex-container" style="flex-direction:row; height: 40%; margin-bottom: 15px; width: 100%">
+                Number of results: <textarea class="input" id = "numMatches" style="height: 20px; width: 20px;">25</textarea>
+            </div>
+            <div class = "flex-container"><button class="button" id = "searchButton" onclick="search()" style="margin-top: 7vh">Search</button></div>
+        </div>
+
+        <div id="searchResultsDiv" class="flex-container" style = "width:100%; margin-top: 20px; margin-bottom: 20px;"></div>
+
+    <script>
+        function search() {
+            var queryText = document.getElementById('queryText').value;
+            var numMatches = document.getElementById('numMatches').value;
+
+            var searchButton = document.getElementById("searchButton");
+            searchButton.innerHTML = "Searching (may take a minute)";
+            var searchResultsDiv = document.getElementById("searchResultsDiv");
+
+            var xhr = new XMLHttpRequest();
+/*            xhr.open('POST', 'http://127.0.0.1:5000/litvdb/search', true); */
+            xhr.open('POST', 'https://yg8q32yhcc.execute-api.us-east-1.amazonaws.com/litvdb/search', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    searchButton.innerHTML = "Search";
+                    if (xhr.status === 200) {
+                        var searchResults = JSON.parse(xhr.responseText);
+                        displaySearchResults(searchResults);
+                    } else {
+                        console.error('Request failed:', xhr.status);
+                        searchResultsDiv.textContent = `Request failed: ${xhr.status}`;
+                    }
+                }
+            }
+            xhr.send(JSON.stringify({'text': queryText, 'k': numMatches}));
+        }
+
+        function displaySearchResults(results) {
+            var searchResultsDiv = document.getElementById('searchResultsDiv');
+            searchResultsDiv.innerHTML = ``;
+            for(let i = 0; i < results.length; ++i) {
+                searchResultsDiv.innerHTML += `
+            <div class = "scroll-box">
+                <i>${results[i].title}</i> by <b>${results[i].author}</b>:<br>
+                ${results[i].text}
+            </div>
+                `;
+            }
+            searchResultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    </script>
+
+        <div class="flex-container">
+            <div class="flex-container" style="margin-top:20px; margin-bottom:20px; width:100%;">
+                <button class="collapsible" onclick="showAbout('addBookDiv')">Add a book to the collection</button>
+            </div>
+            <div id="addBookDiv" style = "margin-bottom: 10vh; display: none; width:40%;">
+                <div class="flex-container" style="height: 40%; margin-bottom: 15px; width:100%;">
+                    <textarea class="input" id = "newBookURL" placeholder = "Enter URL" style="height:20px; width:100%;"></textarea>
+                    <div class = "flex-container"><button class="button" id = "submitNewBookButton" onclick="addBook()" style="margin-top: 7vh">Add book</button></div>
+                </div>
+                
+                <div id="newBookResponseDiv" class="flex-container" style = "width:100%; margin-top: 20px; margin-bottom: 20px;"></div>
+            </div>
+        </div>
+
+    <script>
+        function addBook() {
+            var url = document.getElementById('newBookURL').value;
+
+            var submitNewBookButton = document.getElementById("submitNewBookButton");
+            submitNewBookButton.innerHTML = "Adding book to collection (may take a few minutes)";
+            var newBookResponseDiv = document.getElementById("newBookResponseDiv");
+
+            var xhr = new XMLHttpRequest();
+/*            xhr.open('POST', 'http://127.0.0.1:5000/litvdb/add', true); */
+            xhr.open('POST', 'https://yg8q32yhcc.execute-api.us-east-1.amazonaws.com/litvdb/add', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    submitNewBookButton.innerHTML = "Add book";
+                    if (xhr.status === 200) {
+                        var outcomeRecv = JSON.parse(xhr.responseText);
+                        addBookDisplayOutcome(outcomeRecv);
+                    } else {
+                        console.error('Request failed:', xhr.status);
+                        newBookResponseDiv.textContent = `Request failed: ${xhr.status}`;
+                    }
+                }
+            }
+            xhr.send(JSON.stringify({'url': url}));
+        }
+
+        function addBookDisplayOutcome(outcome) {
+            var newBookResponseDiv = document.getElementById('newBookResponseDiv');
+
+            newBookResponseDiv.innerHTML = `
+            <div class = "scroll-box" style = "max-height: 160px;">
+                ${(outcome.message)}
+            </div>
+                `;
+            newBookResponseDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    </script>
+        <div class="flex-container">
+            <div class="flex-container" style="margin-top:20px; margin-bottom:20px">
+                <button class="collapsible" onclick="listCollection()">Learn about the collection</button>
+            </div>
+            <div id="about" class = "model-reports" style = "margin-bottom: 10vh;">
+<b>About the collection</b>
+<br><br>
+This collection demonstrates a Machine Learning concept called <i><a href="https://www.ibm.com/think/topics/vector-embedding">vector embeddings</a></i>. These are mathematical representations of natural language generated using pre-trained Large Language models, where text is converted into a single point in a vector space consisting of hundreds or thousands of dimensions. The distance between the points encodes the similarity in the meanings of the text. This allows a powerful method for searching through text documents, where instead of searching by a keyword, it is possible to search by meaning: for example, searching the phrase <i>he feels sad</i> can return results where the words "feels" and "sad" may not occur, but have an equivalent meaning.
+                
+The process of creating this database is covered in my <a href="https://github.com/tommyliphysics/tommyli-ml/tree/main/literature_vdb">Machine Learning git-hub repository</a>. The books were downloaded from <a href="https://gutenberg.org">Project Gutenberg</a>, then encoded as vector embeddings using a transformer (neural network) model available at huggingface, <a href="https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2">all-MiniLM-L6-v2</a>). The database is hosted on a serverless AWS container and access is through AWS Fargate and API Gateway.<br><br>
+
+                <div id="collectionDiv"></div>
+                <table style = "width: 100%; margin: 5px auto; text-align:left;" id = "bookList"></table>
+            </div>
+        </div>
+        
+        <script>
+            function showAbout(hiddenElement) {
+                var hiddenTextElement = document.getElementById(hiddenElement);
+                if(hiddenTextElement.style.display == "none") {
+                    hiddenTextElement.style.display = "block";
+                    hiddenTextElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else{
+                    hiddenTextElement.style.display = "none";
+                }
+            }
+
+            function writeList(results) {
+                let table = document.getElementById("bookList");
+                table.innerHTML = "";
+                let row = table.insertRow();
+                row.insertCell(0).innerHTML = "<b>Author</b>";
+                row.insertCell(1).innerHTML = "<b>Title</b>";
+
+                for(let i = 0; i < results.length; ++i) {
+                    let row = table.insertRow();
+                    row.insertCell(0).innerHTML = `${results[i].author}`;
+                    row.insertCell(1).innerHTML = `${results[i].title}`;
+                }
+            }
+            
+            function listCollection() {
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', 'http://127.0.0.1:5000/litvdb/list', true);
+/*            xhr.open('POST', 'https://yg8q32yhcc.execute-api.us-east-1.amazonaws.com/aidetector/predict', true); */
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                var collectionDiv = document.getElementById("collectionDiv");
+                collectionDiv.innerHTML = "Loading current titles...";
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            var bookList = JSON.parse(xhr.responseText);
+                            collectionDiv.innerHTML = "Current titles:";
+                            writeList(bookList);
+                        } else {
+                            console.error('Request failed:', xhr.status);
+                        }
+                    }
+                }
+                xhr.send(JSON.stringify({'request': 'list'}));
+
+                showAbout('about');
+            }
+        </script>
+
+    </div>
+</body>
+</html>
