@@ -8,7 +8,7 @@
     <title>AI detector</title>
 </head>
 
-<body>
+<body onload="javascript:getStatus()">
     <div class="flex-parent">
         <div class="flex-container" style="height: 15%; margin-bottom: 20px; text-align:center;">
             <h1>AI detector</h1>
@@ -25,6 +25,22 @@ Enter your text below, and the model will guess if it was written by an AI or no
         <div id="predictionsDiv" class="flex-container" style = "width:100%; margin-top: 20px; margin-bottom: 20px;"></div>
 
     <script>
+        function getStatus() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'https://yg8q32yhcc.execute-api.us-east-1.amazonaws.com/aidetector', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        console.log(xhr.responseText);
+                    } else {
+                        console.error('Server down:', xhr.status);
+                    }
+                }
+            }
+            xhr.send();
+        }
+        
         function getPredictions() {
             var text = document.getElementById('text').value;
 
