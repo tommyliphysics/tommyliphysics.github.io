@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calliope by BirefringentAI</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+ <div class="page-container">
+  <div class="sidebar">
+    <a href="#" id="showPredictOverlayButton" class="sidebar-link">Get a prediction</a>
+    <a href="#" id="showAboutOverlayButton" class="sidebar-link">About the model</a>
+  </div>
+        
+  <div class="content">
+    <div class="titlePanel">
+      <h1>Calliope</h1>
+      <h2>by BirefrigentAI</h2>
+      <hr style="width:50%;text-align:center;margin-top:25px;color:#fff;">
+      <h2 id="getStartedTitleText"><a href="#" class="showPredictPanel">Get started</a></h2>
+    </div>
+    
+    <div id="startOverlayPanel" class="overlay">
+      <div class = "overlay-panel-text">
+      Welcome to <b>Calliope</b>, an AI tool for educational content creators.<br><br>
+      We'll have a conversation about your idea for a YouTube video, and using the power of <a href="https://en.wikipedia.org/wiki/Deep_learning">deep neural networks</a>, we'll try to estimate the number of views it'll get within the first two years.<br><br>
+      </div>
+      <div id="clickStart" style = "position:fixed; bottom: 5%; font-size: 80%"></div>
+    </div>
+
+    <div id="explainOverlayPanel" class="overlay"  style="left: 41%; width: 31%;">
+      <div class = "overlay-panel-text" style = "left:0">
+        <div style = "font-weight: bold; font-variant: small-caps; letter-spacing: 0.2em; font-size: 120%">First impressions</div>
+        <hr style = "width: 100%; text-align: left;">
+      When YouTube recommends your video to a viewer, the first things they'll see are:
+      <ol>
+        <li>A thumbnail image</li>
+        <li>Your video title</li>
+        <li>Your channel name</li>
+      </ol>
+      and this is where we'll begin.
+      </div>
+      <div style = "position:fixed; bottom: 5%; font-size: 80%">
+        Click anywhere to continue
+      </div>
+    </div>
+    
+    <div id="submitThumbnailOverlayPanel" class="overlay">
+      <div class = "overlay-panel-text">
+        Let's start with a description of your thumbnail.<br><br>Try and be as detailed as possible: mention any people, animals or objects, and describe their appearance and location in the image:
+      </div>
+      <textarea class="input-box" id="inputVideoThumbnail" placeholder="Enter a description of your thumbnail..."></textarea>
+      <div class = "button-container">
+        <button onclick="showPanel(2)" class = "reverse-button"></button>
+        <button onclick="showPanel(4)" class = "play-button"></button>
+      </div>
+    </div>
+    
+    <div id="submitVideoTitleOverlayPanel" class="overlay">
+      <div class = "overlay-panel-text">
+        Next, let's get a title for your video. Be creative!
+      </div>
+      <textarea class="input-box" id="inputVideoTitle" placeholder="Enter your video title..."></textarea>
+      <div class = "button-container">
+        <button onclick="showPanel(3)" class = "reverse-button"></button>
+        <button onclick="showPanel(5)" class = "play-button"></button>
+      </div>
+    </div>
+    
+    <div id="submitChannelTitleOverlayPanel" class="overlay">
+      <div class = "overlay-panel-text">
+      Now let's get the name of your YouTube channel.<br><br>
+      If you don't have one yet, that's OK! Just tell me what you plan to name your channel when your publish your video:<br><br>
+      </div>
+      <textarea class="input-box" id="inputChannelTitle" placeholder="Enter your channel title..."></textarea>
+      <div class = "button-container">
+        <button onclick="showPanel(4)" class = "reverse-button"></button>
+        <button onclick="getPredictions(1)" class = "play-button"></button>
+      </div>
+    </div>
+  
+    <div id="firstImpressionsResultsOverlayPanel" class="overlay">
+      <div class = "overlay-panel-text" id="firstImpressionsPredictionText"></div>
+      <div style="position:fixed; display: flex; flex-direction:column; gap: 20px; bottom: 10%">
+        <button onclick="showPanel(7)" class = "square-button">Continue</button>
+        <button onclick="showPanel(1)" class = "square-button">Return to start</button>
+      </div>
+    </div>
+    
+    <div id="submitVideoDescriptionOverlayPanel" class="overlay" style="top:31%;height:56%">
+      <div class = "overlay-panel-text">
+        <div style = "font-weight: bold; font-variant: small-caps; letter-spacing: 0.2em; font-size: 120%">Lasting impressions</div>
+        <hr style = "width: 100%; text-align: left;">
+        Now that we've thought about first impressions, let's move on to things about your video that might engage a viewer enough to get your video shared. Describe what your video's about in general:
+      </div>
+      <textarea class="input-box" id="inputVideoDescription" placeholder="Enter a video description"></textarea>
+      <div class = "button-container">
+        <button onclick="showPanel(6)" class = "reverse-button"></button>
+        <button onclick="showPanel(8)" class = "play-button"></button>
+      </div>
+    </div>
+
+  <div id="submitVisualDescriptionOverlayPanel" class="overlay" style="top: 26%; height: 61%">
+      <div class = "overlay-panel-text">
+        Next, let's talk about what could be happening <b>visually</b> in your video.<br><br>
+        Describe some key moments that might grab a viewer's attention. It could be a moment of humour, an exhibition of fine photographic or cinematographic skill, an interesting shot from an animation, or anything else that a viewer will remember. If you haven't already created your video, that's OK, just give me your ideas!<br><br>
+      </div>
+      <textarea class="input-box" id="inputVisualDescription" placeholder="Enter a description of your visuals..."></textarea>
+      <div class = "button-container">
+        <button onclick="showPanel(7)" class = "reverse-button"></button>
+        <button onclick="showPanel(9)" class = "play-button"></button>
+      </div>
+    </div>
+
+    <div id="submitAudioDescriptionOverlayPanel" class="overlay">
+      <div class = "overlay-panel-text">
+        Now let's move on to the <b>audio</b>.<br><br>
+        If there's speech in the video, give me some idea of what's being said or discussed. If there's a soundtrack, tell me about the music.<br><br>
+      </div>
+      <textarea class="input-box" id="inputAudioDescription" placeholder="Enter a description of your audio..."></textarea>
+      <div class = "button-container">
+        <button onclick="showPanel(8)" class = "reverse-button"></button>
+        <button onclick="getPredictions(2)" class = "play-button"></button>
+      </div>
+    </div>
+    
+    <div id="lastingImpressionsResultsOverlayPanel" class="overlay">
+      <div class = "overlay-panel-text" id="lastingImpressionsPredictionText"></div>
+      <div style="position:fixed; display: flex; flex-direction:column; gap: 20px; bottom: 10%">
+        <button onclick="showPanel(11)" class = "square-button">Continue</button>
+        <button onclick="showPanel(1)" class = "square-button">Return to start</button>
+      </div>
+    </div>
+
+    <div id="submitSubscriberVideoCountOverlayPanel" class="overlay" style="  top: 25%; height: 61%;">
+      <div class = "overlay-panel-text">
+        <div style = "font-weight: bold; font-variant: small-caps; letter-spacing: 0.2em; font-size: 120%">About you</div>
+        <hr style = "width: 100%; text-align: left;">
+      An important factor that's correlated with video engagement is the <b>size</b> of your YouTube channel.<br><br>
+      Let's begin with the number of subscribers you currently have, and the number of videos you've published so far. If you haven't created a channel yet, that's OK! Just enter 0 in both fields:
+
+      <div style="display:flex; flex-direction:row;margin-top:40px;margin-left:50px auto;">
+          <div style="display:flex; flex-direction:column">
+            <div>Subscriber count:</div>
+            <div>Video count:</div>
+          </div>
+          <div style="display:flex; flex-direction:column; margin-left: 20px;">
+            <textarea id="inputSubscriberCount" placeholder="0" style="width:80px;"></textarea>
+            <textarea id="inputVideoCount" placeholder="0" style="width:80px;"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class = "button-container">
+        <button onclick="showPanel(10)" class = "reverse-button"></button>
+        <button onclick="showPanel(12)" class = "play-button"></button>
+      </div>
+    </div>
+
+    <div id="submitChannelDescriptionOverlayPanel" class="overlay">
+      <div class = "overlay-panel-text">
+      One final thing! What's your channel about?<br><br>
+      Describe who you are and what kind of videos you plan to make in the future:<br><br>
+      </div>
+      <textarea class="input-box" id="inputChannelDescription" placeholder="Enter your channel description..."></textarea>
+      <div class = "button-container">
+        <button onclick="showPanel(11)" class = "reverse-button"></button>
+        <button onclick="getPredictions(3)" class = "play-button"></button>
+      </div>
+    </div>
+
+    <div id="finalResultsOverlayPanel" class="overlay">
+      <div class = "overlay-panel-text" id="finalPredictionText"></div>
+      <div style="position:fixed; display: flex; flex-direction:column; gap: 20px; bottom: 10%">
+        <button onclick="newVideo()" class = "square-button">New video</button>
+        <button onclick="showPanel(1)" class = "square-button">Return to start</button>
+      </div>
+    </div>
+
+    <div id="aboutOverlayPanel" class="overlay">
+      <div class = "overlay-panel-text">
+        <div style = "font-weight: bold; font-variant: small-caps; letter-spacing: 0.2em; font-size: 120%">About the model</div>
+        <hr style = "width: 100%; text-align: left;">
+        <b>Calliope</b> is an AI model powered by <b>deep-learning</b>: it's based on a <a href="https://huggingface.co/docs/transformers/model_doc/distilbert">large-language model</a> that was pre-trained to understand natural human language, but specifically fine-tuned to study the patterns in YouTube videos and their creators' channels that align with high view counts.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const titlePanel = document.querySelector('.titlePanel');
+  const startOverlayPanel = document.getElementById('startOverlayPanel');
+  const explainOverlayPanel = document.getElementById('explainOverlayPanel');
+  const submitThumbnailOverlayPanel = document.getElementById('submitThumbnailOverlayPanel');
+  const submitVideoTitleOverlayPanel = document.getElementById('submitVideoTitleOverlayPanel');
+  const submitChannelTitleOverlayPanel = document.getElementById('submitChannelTitleOverlayPanel');
+  const firstImpressionsResultsOverlayPanel = document.getElementById('firstImpressionsResultsOverlayPanel');
+  const submitVideoDescriptionOverlayPanel = document.getElementById('submitVideoDescriptionOverlayPanel');
+  const submitVisualDescriptionOverlayPanel = document.getElementById('submitVisualDescriptionOverlayPanel');
+  const submitAudioDescriptionOverlayPanel = document.getElementById('submitAudioDescriptionOverlayPanel');
+  const lastingImpressionsResultsOverlayPanel = document.getElementById('lastingImpressionsResultsOverlayPanel');
+  const submitSubscriberVideoCountOverlayPanel = document.getElementById('submitSubscriberVideoCountOverlayPanel');
+  const submitChannelDescriptionOverlayPanel = document.getElementById('submitChannelDescriptionOverlayPanel');
+  const finalResultsOverlayPanel = document.getElementById('finalResultsOverlayPanel');
+
+  let panels = [titlePanel, startOverlayPanel, explainOverlayPanel, submitThumbnailOverlayPanel, submitVideoTitleOverlayPanel, submitChannelTitleOverlayPanel,firstImpressionsResultsOverlayPanel, submitVideoDescriptionOverlayPanel, submitVisualDescriptionOverlayPanel, submitAudioDescriptionOverlayPanel,lastingImpressionsResultsOverlayPanel,submitSubscriberVideoCountOverlayPanel,submitChannelDescriptionOverlayPanel, finalResultsOverlayPanel,aboutOverlayPanel];
+  let serverStatus = true;
+
+  const inputChannelTitle = document.getElementById('inputChannelTitle');
+  const inputVideoTitle = document.getElementById('inputVideoTitle');
+  const inputVideoThumbnailDescription = document.getElementById('inputVideoThumbnail');
+  const inputVideoDescription = document.getElementById('inputVideoDescription');
+  const inputVisualDescription = document.getElementById('inputVisualDescription');
+  const inputAudioDescription = document.getElementById('inputAudioDescription');
+  const inputSubscriberCount = document.getElementById('inputSubscriberCount');
+  const inputVideoCount = document.getElementById('inputVideoCount');
+  const inputChannelDescription = document.getElementById('inputChannelDescription');
+
+  const firstImpressionsPredictionText = document.getElementById('firstImpressionsPredictionText');
+
+  document.addEventListener("DOMContentLoaded", function() {
+    titlePanel.classList.add("loaded");
+  })
+  
+  function checkStatus() {
+    var clickStart = document.getElementById('clickStart');
+    var resultsPanel = document.getElementById("resultsPanel");
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'https://yg8q32yhcc.execute-api.us-east-1.amazonaws.com/calliope', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        if (xhr.status === 200) {
+          console.log(xhr.responseText);
+          clickStart.innerHTML = 'Click anywhere to begin';
+        } else {
+          console.error('Server is down:', xhr.status);
+          serverStatus = false;
+          clickStart.innerHTML = 'Sorry! Server is temporarily down. Please try again later';
+        }
+      }
+    };
+    
+    xhr.onerror = function() {
+      console.error('Server is down:', xhr.status);
+    }; 
+    
+    xhr.send();
+  }
+
+  function showPanel(j) {
+    for(i = 1; i < panels.length; ++i) {
+      if(i == j) {
+        panels[i].classList.add('active');
+      }
+      else
+        panels[i].classList.remove('active');
+    }
+  }
+
+  titlePanel.addEventListener('click', () => {
+    titlePanel.classList.add("move-up");
+    getStartedText = document.getElementById('getStartedTitleText');
+    getStartedText.innerHTML="";
+    showPanel(1);
+    checkStatus();
+  });
+  
+  showPredictOverlayButton.addEventListener('click', () => {
+    titlePanel.classList.add("move-up");
+    getStartedText = document.getElementById('getStartedTitleText');
+    getStartedText.innerHTML="";
+    showPanel(1);
+    checkStatus();
+  });
+  
+  showAboutOverlayButton.addEventListener('click', () => {
+    titlePanel.classList.add("move-up");
+    getStartedText = document.getElementById('getStartedTitleText');
+    getStartedText.innerHTML="";
+    showPanel(14);
+  });
+  
+  startOverlayPanel.addEventListener('click', () => {
+    if(serverStatus)
+      showPanel(2);
+  });
+
+  explainOverlayPanel.addEventListener('click', () => {
+    showPanel(3);
+  });
+
+  function getPredictions(stage) {
+    switch(stage) {
+      case 1:
+        showPanel(6);
+        firstImpressionsPredictionText.innerHTML = "Getting prediction...";
+        break;
+      case 2:
+        showPanel(10);
+        lastingImpressionsPredictionText.innerHTML = "Getting prediction...";
+        break;
+      case 3:
+        showPanel(13);
+        finalPredictionText.innerHTML = "Getting prediction...";
+        break;
+      }
+  
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'https://yg8q32yhcc.execute-api.us-east-1.amazonaws.com/calliope/predict', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        if (xhr.status === 200) {
+          var predictionsRecv = JSON.parse(xhr.responseText);
+          displayPredictions(predictionsRecv, stage);
+        } else {
+          console.error('Request failed:', xhr.status);
+          displayPredictionError(stage);
+        }
+      }
+    }
+    xhr.onerror = function() {
+      console.error('Request failed:', xhr.status);
+      displayPredictionError(stage);
+    }; 
+    xhr.send(JSON.stringify({
+      'channel_title': inputChannelTitle.value,
+      'video_title': inputVideoTitle.value,
+      'video_thumbnail_description': inputVideoThumbnailDescription.value,
+      'video_description': inputVideoDescription.value,
+      'visual_description': inputVisualDescription.value,
+      'audio_description': inputAudioDescription.value,
+      'subscriber_count': inputSubscriberCount.value,
+      'video_count': inputVideoCount.value,
+      'channel_description': inputChannelDescription.value
+      }));
+  }
+  
+  function displayPredictions(predictions, stage) {
+    switch(stage) {
+      case 1:
+        showPanel(6);
+        firstImpressionsPredictionText.innerHTML = `Just based on first impressions, the AI finds a <b>${predictions.prob_1}%</b> probability that your video will get over <b>${predictions.thresh_1} views</b> and a <b>${predictions.prob_2}%</b> probability that your video will get over <b>${predictions.thresh_2} views</b>.<br><br>To improve the AI's analysis, though, we can talk more about the content of your video. Would you like to continue?<br><br>`;
+        break;
+      case 2:
+        showPanel(10);
+        lastingImpressionsPredictionText.innerHTML = `Now that the AI has taken the <i>content</i> of your video into consideration, it finds a <b>${predictions.prob_1}%</b> probability that your video will get over <b>${predictions.thresh_1} views</b> and a <b>${predictions.prob_2}%</b> probability that your video will get over <b>${predictions.thresh_2} views</b>.<br><br>Now there's one last thing that you can tell us about, and that's <b>you!</b> Would you like to continue?<br><br>`;
+        break;
+      case 3:
+        showPanel(13);
+        finalPredictionText.innerHTML = `Now that the AI has learnt more about you, it finds a <b>${predictions.prob_1}%</b> probability that your video will get over <b>${predictions.thresh_1} views</b> and a <b>${predictions.prob_2}%</b> probability that your video will get over <b>${predictions.thresh_2} views</b>.<br><br>You can go back and revisit your responses to try to improve the probabilities, or start again with a new video:<br><br>`;
+        break;
+    }
+  }
+  
+  function displayPredictionError(stage) {
+    switch(stage) {
+      case 1:
+        showPanel(6);
+        firstImpressionsPredictionText.innerHTML = `Sorry, there was an error in the server.`;
+        break;
+      case 2:
+        showPanel(10);
+        lastingImpressionsPredictionText.innerHTML = `Sorry, there was an error in the server.`;
+        break;
+      case 3:
+        showPanel(13);
+        finalPredictionText.innerHTML = `Sorry, there was an error in the server.`;
+        break;
+    }
+  }
+
+  function refresh() {
+    inputChannelTitle.value = "";
+    inputVideoTitle.value = "";
+    inputVideoThumbnailDescription.value = "";
+    inputVideoDescription.value = "";
+    inputVisualDescription.value = "";
+    inputAudioDescription.value = "";
+    inputSubscriberCount.value = "";
+    inputVideoCount.value = "";
+    inputChannelDescription.value = "";
+  }
+
+  function newVideo() {
+    showPanel(1);
+    refresh();
+  }
+</script>
+
+</body>
+</html>
+

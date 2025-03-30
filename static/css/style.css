@@ -5,6 +5,21 @@ html {
   font-size: 12pt;
 }
 
+h1 {
+  font-weight: bold;
+	font-family: "Source Sans Pro", sans-serif !important;
+	font-size: 18pt;
+}
+
+h2 {
+  font-family: "Source Sans Pro", sans-serif !important;
+  font-size: 16pt;
+}
+
+h3 {
+  font-family: "Source Sans Pro", sans-serif !important;
+  font-size: 14pt;
+}
 
 body { 
 	width: 100%;
@@ -38,11 +53,6 @@ body {
     margin-left: auto;
     margin-right: auto;
     padding: 0px;
-}
-
-h1 {
-    font-size: 1.5rem;
-    font-weight: bold;
 }
 
 #dropdownButtonContainer {
@@ -100,15 +110,43 @@ h1 {
 }
 
 .button {
+		font-family: "Source Sans Pro", sans-serif;
+		-moz-appearance: none;
+		-webkit-appearance: none;
+		-ms-appearance: none;
+		appearance: none;
+		-moz-transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+		-webkit-transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+		-ms-transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+		transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+		background-color: transparent;
+		border-radius: 4px;
+		border: 0;
+		box-shadow: inset 0 0 0 1px #ffffff;
+		color: #ffffff !important;
+		cursor: pointer;
+		display: inline-block;
+		font-size: 0.8rem;
+		font-weight: 300;
+		height: 2.75rem;
+		letter-spacing: 0.2rem;
+		line-height: 2.75rem;
+		outline: 0;
+		padding: 0 1.25rem 0 1.35rem;
+		text-align: center;
+		text-decoration: none;
+		text-transform: uppercase;
+		white-space: nowrap;
+/*
     display: inline-block;
     border: 2px #eef;
     padding: 10px 40px;
     text-align: center;
     text-decoration: none;
     font-size: 1.2rem;
-/*    margin: 4px 12px auto; */
+    margin: 4px 12px auto; 
     cursor: pointer;
-    background-color: #ddddea;
+    background-color: #ddddea; */
 }
 
 .scroll-box {
@@ -156,7 +194,8 @@ h1 {
 }
 
 .button:hover, .collapsible:hover, .dropdown-button:hover, .dropdown-option:hover {
-    background-color: #ffffff;
+    background-color: #ddddea;
+    color: #000000;
 }
 
 .collapsible {
