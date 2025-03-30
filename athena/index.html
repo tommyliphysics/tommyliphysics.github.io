@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Athena by BirefringentAI</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+ <div class="page-container">
+  <div class="sidebar">
+    <a href="#" id="showPredictOverlayButton" class="sidebar-link">Detect AI</a>
+    <a href="#" id="showAboutOverlayButton" class="sidebar-link">About the model</a>
+    <a href="#" class="sidebar-link">GitHub</a>
+    <a href="#" class="sidebar-link">Medium</a>
+    <a href="#" class ="sidebar-link" id="togglePrevious" onclick="toggleDropdown()">Previous predictions</a>
+    <div id="previousPredictions"></div>
+  </div>
+
+  <div class="content">
+    <div class="titlePanel">
+      <h1>Athena</h1>
+      <h2>AI Detector by BirefrigentAI</h2>
+      <hr style="width:50%;text-align:center;margin-top:25px;color:#fff;">
+    </div>
+  </div>
+
+  <div id="predictOverlayPanel" class="overlay">
+    <div class="scroll-box" id="scrollBox"></div>
+    <textarea class="input-box" id="input" placeholder="Enter your text here..." rows="5" cols="50"></textarea>
+    <button class="round-button" id="predictButton" onclick="getPredictions()"></button>
+    <h4>Works with: GPT Deepseek Claude Gemini Llama Mistral</h4>
+  </div>
+ </div>
+
+  <div id="aboutOverlayPanel" class="overlay">
+    About the model...
+  </div>
+
+  <div id="showPreviousResultOverlayPanel" class="overlay"></div>
+
+  <div id="resultsPanel"></div>
+
+</div>
+
+<script>
+  const titlePanel = document.querySelector('.titlePanel');
+  const button = document.getElementById('predictButton');
+  const predictOverlayPanel = document.getElementById('predictOverlayPanel');
+  const showPredictOverlayButton = document.getElementById('showPredictOverlayButton');
+  const aboutOverlayPanel = document.getElementById('aboutOverlayPanel');
+  const showAboutOverlayButton = document.getElementById('showAboutOverlayButton');
+  
+  document.addEventListener("DOMContentLoaded", function() {
+    titlePanel.classList.add("loaded");
+    console.log("loaded.");
+  })
+  
+  function checkStatus() {
+    var resultsPanel = document.getElementById("resultsPanel");
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'https://yg8q32yhcc.execute-api.us-east-1.amazonaws.com/athena', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        if (xhr.status === 200) {
+          console.log(xhr.responseText);
+        } else {
+          resultsPanel.classList.add('active');
+          resultsPanel.innerHTML = `Server is down.`;
+          resultsPanel.style.backgroundColor ="#f66";
+          console.error('Server is down:', xhr.status);
+          button.style.background = "linear-gradient(45deg, #CC0000, #CC7777)";
+        }
+      }
+    };
+    
+    xhr.onerror = function() {
+      resultsPanel.classList.add('active');
+      resultsPanel.innerHTML = `Server is down.`;
+      console.error('Server is down:', xhr.status);
+      button.style.background = "linear-gradient(45deg, #CC0000, #CC7777)";
+    }; 
+    
+    xhr.send();
+  }
+
+  showPredictOverlayButton.addEventListener('click', () => {
+    predictOverlayPanel.classList.add('active');
+    titlePanel.classList.add("move-up");
+    aboutOverlayPanel.classList.remove('active');
+    showPreviousResultOverlayPanel.classList.remove('active');
+    resultsPanel.classList.remove('active');
+    checkStatus();
+  });
+/*
+  predictOverlayPanel.addEventListener('click', (e) => {
+    if (e.target === predictOverlayPanel) {
+      predictOverlayPanel.classList.remove('active');
+    }
+  });
+*/
+  showAboutOverlayButton.addEventListener('click', () => {
+    aboutOverlayPanel.classList.add('active');
+    titlePanel.classList.add("move-up");
+    predictOverlayPanel.classList.remove('active');
+    showPreviousResultOverlayPanel.classList.remove('active');
+    resultsPanel.classList.remove('active');
+  });
+/*
+  aboutOverlayPanel.addEventListener('click', (e) => {
+    if (e.target === aboutOverlayPanel) {
+      aboutOverlayPanel.classList.remove('active');
+    }
+  });
+  */
+  function toggleDropdown() {
+    var dropdownContent = document.getElementById('previousPredictions');
+    if (window.getComputedStyle(dropdownContent).display === "none") {
+      dropdownContent.style.display = "flex";
+    } else {
+      dropdownContent.style.display = "none";
+    }
+  }
+</script>
+
+<script>
+  function changeButtonToLoading() {
+    const button = document.getElementById("predictButton");
+    button.innerHTML = '<div class="spinner"></div>';
+  }
+
+  function getPredictions() {
+    changeButtonToLoading();
+    var text = document.getElementById('input').value;
+    var resultsPanel = document.getElementById("resultsPanel");
+    var xhr = new XMLHttpRequest();
+    
+    const button = document.getElementById("predictButton");
+    xhr.open('POST', 'https://yg8q32yhcc.execute-api.us-east-1.amazonaws.com/athena/predict', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        if (xhr.status === 200) {
+          var predictionsRecv = JSON.parse(xhr.responseText);
+          displayPredictions(predictionsRecv);
+  
+          button.innerHTML = '';
+          button.style.background = "linear-gradient(45deg, #00CC00, #77CC77)";
+          resultsPanel.style.background = "linear-gradient(45deg, #00CC00, #77CC77)";
+      } else {
+          console.error('Request failed:', xhr.status);
+          button.innerHTML = '';
+          button.style.background = "linear-gradient(45deg, #CC0000, #CC7777)";
+          
+          resultsPanel.textContent = `Request failed: ${xhr.status}`;
+          resultsPanel.style.background = "linear-gradient(45deg, #CC0000, #CC7777)";
+        }
+      }
+    }
+    xhr.send(JSON.stringify({'text': text}));
+  }
+  
+  let previousTexts = [];
+  let previousPredictionsArr = [];
+
+  function displayPredictions(predictions) {
+    var resultsPanel = document.getElementById('resultsPanel');
+    var inputArea = document.getElementById('input'); 
+    var inputText = inputArea.value;
+    var predictionText = `${predictions.distilbert_class} ${(predictions.distilbert_proba*100).toFixed(2)}%`;
+
+    resultsPanel.classList.add('active');
+    resultsPanel.classList.remove('move-up');
+    resultsPanel.innerHTML = predictionText;
+    document.getElementById('scrollBox').innerHTML =inputText;
+    inputArea.value = '';
+
+    previousTexts.push(inputText);
+    previousPredictionsArr.push(predictionText);
+    
+    document.getElementById('togglePrevious').classList.add("active");
+    
+    var previousPredictions = document.getElementById('previousPredictions');
+    var inputTruncated =  inputText.length > 50 ? inputText.slice(0, 50) + "..." : inputText;
+    console.log(inputTruncated);
+    console.log(previousTexts.length-1);
+    console.log('<a href="#" onclick=showPreviousPrediction(' + (previousTexts.length-1) + ') class="previous-prediction-link">' + inputTruncated + '</a>');
+    previousPredictions.innerHTML += '<a href="#" onclick=showPreviousPrediction(' + (previousTexts.length-1) + ') class="previous-prediction-link">' + inputTruncated + '</a>';
+    previousPredictions.classList.add("active");
+  }
+  
+  function showPreviousPrediction(i) {
+    previousResultPanel = document.getElementById('showPreviousResultOverlayPanel');
+    previousResultPanel.innerHTML = previousTexts[i];
+
+    predictOverlayPanel.classList.remove('active');
+    aboutOverlayPanel.classList.remove('active');
+    previousResultPanel.classList.add('active');
+    
+    resultsPanel.innerHTML = previousPredictionsArr[i];
+    resultsPanel.classList.add('active');
+    resultsPanel.classList.add('move-up');
+    console.log(previousTexts[i]);
+  }
+</script>
+</body>
+</html>
+
