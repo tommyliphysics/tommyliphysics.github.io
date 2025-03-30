@@ -47,8 +47,8 @@ Enter your text below, and the model will guess if it was written by an AI or no
             var predictionsDiv = document.getElementById("predictionsDiv");
 
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'http://127.0.0.1:5000/aidetector/predict', true);
-/*            xhr.open('POST', 'https://yg8q32yhcc.execute-api.us-east-1.amazonaws.com/aidetector/predict', true); */
+//            xhr.open('POST', 'http://127.0.0.1:5000/aidetector/predict', true);
+            xhr.open('POST', 'https://yg8q32yhcc.execute-api.us-east-1.amazonaws.com/aidetector/predict', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
