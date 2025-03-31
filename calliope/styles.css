@@ -2,12 +2,6 @@
   display: none;
 }
 
-@media (max-width: 768px) {
-  .mobile-only {
-    display: block;
-  }
-}
-
 body {
   margin: 0;
   padding: 0;
@@ -34,7 +28,7 @@ a:visited {
 .sidebar {
   height: 100%;
   width: 14%;
-  position: fixed;
+  position: absolute;
   border-right: 5px solid #fff;
   top: 0;
   left: 0;
@@ -133,12 +127,6 @@ h4 {
   text-transform: uppercase;
   letter-spacing:0.4rem;
 }
-/*
-.content > *:not(.input-box) {
-  margin-bottom: 20px;
-}
-*/
-
 
 .overlay {
   flex-grow: 1;
@@ -151,18 +139,13 @@ h4 {
   box-sizing: border-box;
   overflow-x: hidden;
 
-/*  border: 5px solid #22f; */
-
-  position: fixed;
+  position: absolute;
   top: 35%;
   left: 32%;
   width: 51%;
   height: 51%;
   z-index: 1000;
-  
-/*  background-color: #ddf;
-  color: rgba(0, 0, 0, 1);
-*/
+
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   border-radius: 40px;
@@ -171,7 +154,7 @@ h4 {
   color: #ddd;
 
   font-family: "Times New Roman", serif;
-  font-size: 3vh;
+  font-size: 1.25vw;
   
   opacity: 0;
   visibility: hidden;
@@ -184,14 +167,14 @@ h4 {
 }
 
 .overlay-panel-text{
-  position:fixed;
+  position:absolute;
   top:0;
   left:0;
   margin: 3vh;
 }
 
 .input-box {
-  position: fixed;
+  position: absolute;
   width: 80%;
   height: 18vh;
   bottom: 10vh;
@@ -202,7 +185,7 @@ h4 {
   box-sizing: border-box;
 
   margin: 0px auto;
-  font-size: 2.4vh;
+  font-size: 1vw;
 }
 
 .input-box:focus {
@@ -249,11 +232,62 @@ h4 {
  flex-direction:row;
  gap: 15%;
  
- position:fixed;
+ position:absolute;
  bottom: 5%;
 }
 #aboutPage {
   display: none;
   flex-direction: column;
   height: 100%;
+}
+
+@media (max-width: 768px) {
+  .mobile-only {
+    display: block;
+  }
+  .sidebar {
+    width: 19%;
+    font-size:1.9vw;
+  }
+  .content {
+    margin-left: 19%;
+  }
+  .titlePanel {
+  	font-size: 1.9vw;  
+  }
+  .titlePanel.move-up {
+    transform: translateY(-280%);
+  }
+  .overlay {
+    top: 27%;
+    left: 27%;
+    width: 61%;
+    height: 51%;
+    font-size: 3vw;
+  }
+  .input-box {
+    position: absolute;
+    width: 80%;
+    height: 10vh;
+    bottom: 10vh;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    resize: vertical;
+    box-sizing: border-box;
+
+    margin: 0px auto;
+    font-size: 1.9vw;
+  }
+  #finalResultsOverlayPanel {
+    top: 19%;
+    height: 61%;
+  }
+}
+
+@media (min-width: 768px) {
+  #explainOverlayPanel {
+    left: 41%;
+    width: 31%;
+  }
 }

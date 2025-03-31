@@ -22,17 +22,18 @@
 <div class="mobile-only">
   Sorry, this page may not display correctly on mobile devices, but I'm working on it!
 </div>
-  </div>
+
+    </div>
     
     <div id="startOverlayPanel" class="overlay">
       <div class = "overlay-panel-text">
       Welcome to <b>Calliope</b>, an AI tool for educational content creators.<br><br>
       We'll have a conversation about your idea for a YouTube video, and using the power of <a href="https://en.wikipedia.org/wiki/Deep_learning">deep neural networks</a>, we'll try to estimate the number of views it'll get within the first two years.<br><br>
       </div>
-      <div id="clickStart" style = "position:fixed; bottom: 5%; font-size: 80%"></div>
+      <div id="clickStart" style = "position:absolute; bottom: 5%; font-size: 80%"></div>
     </div>
 
-    <div id="explainOverlayPanel" class="overlay"  style="left: 41%; width: 31%;">
+    <div id="explainOverlayPanel" class="overlay">
       <div class = "overlay-panel-text" style = "left:0">
         <div style = "font-weight: bold; font-variant: small-caps; letter-spacing: 0.2em; font-size: 120%">First impressions</div>
         <hr style = "width: 100%; text-align: left;">
@@ -44,7 +45,7 @@
       </ol>
       and this is where we'll begin.
       </div>
-      <div style = "position:fixed; bottom: 5%; font-size: 80%">
+      <div style = "position:absolute; bottom: 5%; font-size: 80%">
         Click anywhere to continue
       </div>
     </div>
@@ -85,7 +86,7 @@
   
     <div id="firstImpressionsResultsOverlayPanel" class="overlay">
       <div class = "overlay-panel-text" id="firstImpressionsPredictionText"></div>
-      <div style="position:fixed; display: flex; flex-direction:column; gap: 20px; bottom: 10%">
+      <div style="position:absolute; display: flex; flex-direction:column; gap: 20px; bottom: 10%">
         <button onclick="showPanel(7)" class = "square-button">Continue</button>
         <button onclick="showPanel(1)" class = "square-button">Return to start</button>
       </div>
@@ -130,7 +131,7 @@
     
     <div id="lastingImpressionsResultsOverlayPanel" class="overlay">
       <div class = "overlay-panel-text" id="lastingImpressionsPredictionText"></div>
-      <div style="position:fixed; display: flex; flex-direction:column; gap: 20px; bottom: 10%">
+      <div style="position:absolute; display: flex; flex-direction:column; gap: 20px; bottom: 10%">
         <button onclick="showPanel(11)" class = "square-button">Continue</button>
         <button onclick="showPanel(1)" class = "square-button">Return to start</button>
       </div>
@@ -174,7 +175,7 @@
 
     <div id="finalResultsOverlayPanel" class="overlay">
       <div class = "overlay-panel-text" id="finalPredictionText"></div>
-      <div style="position:fixed; display: flex; flex-direction:column; gap: 20px; bottom: 10%">
+      <div style="position:absolute; display: flex; flex-direction:column; gap: 20px; bottom: 10%">
         <button onclick="newVideo()" class = "square-button">New video</button>
         <button onclick="showPanel(1)" class = "square-button">Return to start</button>
       </div>
@@ -189,7 +190,6 @@
     </div>
   </div>
 </div>
-
 <script>
   const titlePanel = document.querySelector('.titlePanel');
   const startOverlayPanel = document.getElementById('startOverlayPanel');
