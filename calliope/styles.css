@@ -286,7 +286,7 @@ h4 {
 }
 
 @media (min-width: 768px) {
-  #explainOverlayPanel {
+  #explainOverlayPanel,#startOverlayPanel,#submitVideoTitleOverlayPanel {
     left: 41%;
     width: 31%;
   }
