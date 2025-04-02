@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html >
+<!--Based on https://codepen.io/frytyler/pen/EGdtg-->
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
+    <title>AI detector</title>
+</head>
+
+<body onload="javascript:getStatus()">
+    <div class="flex-parent">
+        <div class="flex-container" style="height: 15%; margin-bottom: 20px; text-align:center;">
+            <h1>AI detector</h1>
+Enter your text below, and the model will guess if it was written by an AI or not. The model was trained and tested on a dataset consisting of 50% human and 50% AI-generated texts (GPT-3.5 Turbo, via the Open-AI API). The human-generated texts comprised IMDB reviews, introductory sections of Wikipedia articles, Reddit posts (r/AITA and r/relationship_advice), and the AI-generated texts were responses to prompts requesting IMDB reviews on specific films, Wikipedia articles on the same selection of topics as the real Wikipedia articles, and Reddit posts with the same titles as the real Reddit posts. The model performed extremely well during testing, scoring over 99% accuracy on a set of 4772 texts. It is expected to perform well on texts that are either Wikipedia articles, IMDB reviews or Reddit posts in r/AITA and r/relationship_advice, but please input whatever kind of text you please and see how well it performs (if the origin of the texts is known).
+        </div>
+
+        <div class="flex-container">
+            <div class="flex-container" style="height: 40%; margin-bottom: 15px;">
+                <textarea class="input" id = "text" placeholder = "Enter text" style="height:30vh;"></textarea>
+                <div class = "flex-container"><button class="button" id = "predictButton" onclick="getPredictions()" style="margin-top: 7vh">Was this written by a human or an AI?</button></div>
+            </div>  
+        </div>
+
+        <div id="predictionsDiv" class="flex-container" style = "width:100%; margin-top: 20px; margin-bottom: 20px;"></div>
+
+    <script>
+        function getStatus() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'https://yg8q32yhcc.execute-api.us-east-1.amazonaws.com/aidetector', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        console.log(xhr.responseText);
+                    } else {
+                        console.error('Server down:', xhr.status);
+                    }
+                }
+            }
+            xhr.send();
+        }
+        
+        function getPredictions() {
+            var text = document.getElementById('text').value;
+
+            var predictButton = document.getElementById("predictButton");
+            predictButton.innerHTML = "Detecting AI text";
+            var predictionsDiv = document.getElementById("predictionsDiv");
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'http://127.0.0.1:5000/aidetector/predict', true);
+/*            xhr.open('POST', 'https://yg8q32yhcc.execute-api.us-east-1.amazonaws.com/aidetector/predict', true); */
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    predictButton.innerHTML = "Was this written by a human or an AI?";
+                    if (xhr.status === 200) {
+                        var predictionsRecv = JSON.parse(xhr.responseText);
+                        displayPredictions(predictionsRecv);
+                    } else {
+                        console.error('Request failed:', xhr.status);
+                        predictionsDiv.textContent = `Request failed: ${xhr.status}`;
+                    }
+                }
+            }
+            xhr.send(JSON.stringify({'text': text}));
+        }
+
+        function displayPredictions(predictions) {
+            var predictionsDiv = document.getElementById('predictionsDiv');
+
+            predictionsDiv.innerHTML = `
+            <div class = "scroll-box" style = "max-height: 160px;">
+                <b>Text: </b> ${document.getElementById('text').value}
+            </div>
+            <div class = "prediction-text" style = "margin-bottom:7vh;">
+                <b>Result: <font color="red">${predictions.distilbert_class}</font></b> with probability: <b><font color="red">${(predictions.distilbert_proba*100).toFixed(2)}%</font></b>.
+            </div>
+                `;
+            predictionsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            document.getElementById('text').value = '';
+        } 
+    </script>
+
+        <div class="flex-container">
+            <div class="flex-container" style="margin-top:20px; margin-bottom:20px">
+                <button class="collapsible" onclick="showAbout('about')">Learn about the models</button>
+            </div>
+            <div id="about" class = "model-reports" style = "margin-bottom: 10vh;">
+<b>About the models</b>
+<br><br>
+This app uses a deep-learning model called DistilBERT (publicly available on the <a href="https://huggingface.co/docs/transformers/en/model_doc/distilbert">huggingface hub</a>), which is a smaller version of the <a href="https://en.wikipedia.org/wiki/BERT_(language_model)">BERT</a> large-language model introduced by Google in 2018. Along with the model used by Chat-GPT, DistilBERT and BERT belong to a class of neural networks called <i>transformers</i>, and were pre-trained to perform text prediction on a very large corpus of documents consisting of about 3.3 billion words. When buildling an AI-detector, I re-trained a number of large language models on the smaller collection of texts I compiled, for the purpose of distinguishing between human and AI generated text.
+
+My dataset consisted of an equal number of human and AI generated texts, 24180 of which were used for training and 4772 for testing. The human-generated texts came from three different sources: 1) the IMDB review database, 2) introductory sections of Wikipedia articles, and 3) the r/AITA and r/relationship_advice subreddits. For each human-generated text, I prompted GPT-3.5 Turbo to write a similar text.
+
+The model performed extremely well during testing, with only 23 texts incorrectly classified out of the 4772. The model is of course expected to perform less well when given texts that are significantly different in style to the training data, e.g. poetry, film scripts, legal documents, etc, or when given texts generated by a large language model other than GPT-3.5 Turbo. The hope is that the knowledge the model acquired from the training data is transferrable to samples of written language from other sources, but it remains to be seen how well the model generalises beyond its training data.
+            </div>
+        </div>
+        <script>
+            function showAbout() {
+                var hiddenTextElement = document.getElementById('about');
+                if(hiddenTextElement.style.display == "none") {
+                    hiddenTextElement.style.display = "block";
+                    hiddenTextElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else{
+                    hiddenTextElement.style.display = "none";
+                }
+            }
+        </script>
+
+    </div>
+</body>
+</html>
