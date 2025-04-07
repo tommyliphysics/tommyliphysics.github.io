@@ -191,8 +191,6 @@
   </div>
 </div>
 
-
-
 <script>
   const titlePanel = document.querySelector('.titlePanel');
   const startOverlayPanel = document.getElementById('startOverlayPanel');
@@ -208,6 +206,7 @@
   const submitSubscriberVideoCountOverlayPanel = document.getElementById('submitSubscriberVideoCountOverlayPanel');
   const submitChannelDescriptionOverlayPanel = document.getElementById('submitChannelDescriptionOverlayPanel');
   const finalResultsOverlayPanel = document.getElementById('finalResultsOverlayPanel');
+  const aboutOverlayPanel = document.getElementById('aboutOverlayPanel');
 
   let panels = [titlePanel, startOverlayPanel, explainOverlayPanel, submitThumbnailOverlayPanel, submitVideoTitleOverlayPanel, submitChannelTitleOverlayPanel,firstImpressionsResultsOverlayPanel, submitVideoDescriptionOverlayPanel, submitVisualDescriptionOverlayPanel, submitAudioDescriptionOverlayPanel,lastingImpressionsResultsOverlayPanel,submitSubscriberVideoCountOverlayPanel,submitChannelDescriptionOverlayPanel, finalResultsOverlayPanel,aboutOverlayPanel];
   let serverStatus = true;
@@ -224,15 +223,22 @@
 
   const firstImpressionsPredictionText = document.getElementById('firstImpressionsPredictionText');
 
+  const showAboutOverlayButton = document.getElementById('showAboutOverlayButton');
+  const showPredictOverlayButton = document.getElementById('showPredictOverlayButton');
+
+  const getStartedText = document.getElementById('getStartedTitleText');
+  const finalPredictionText = document.getElementById('finalPredictionText');
+  const lastingImpressionsPredictionText = document.getElementById('lastingImpressionsPredictionText');
+  
   document.addEventListener("DOMContentLoaded", function() {
     titlePanel.classList.add("loaded");
   })
   
   function checkStatus() {
     var clickStart = document.getElementById('clickStart');
-    var resultsPanel = document.getElementById("resultsPanel");
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'https://yg8q32yhcc.execute-api.us-east-1.amazonaws.com/calliope', true);
+//    xhr.open('POST', 'http://127.0.0.1:5000/calliope', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onreadystatechange = function() {
       if (xhr.readyState === XMLHttpRequest.DONE) {
@@ -255,7 +261,7 @@
   }
 
   function showPanel(j) {
-    for(i = 1; i < panels.length; ++i) {
+    for(let i = 1; i < panels.length; ++i) {
       if(i == j) {
         panels[i].classList.add('active');
       }
@@ -266,7 +272,6 @@
 
   titlePanel.addEventListener('click', () => {
     titlePanel.classList.add("move-up");
-    getStartedText = document.getElementById('getStartedTitleText');
     getStartedText.innerHTML="";
     showPanel(1);
     checkStatus();
@@ -274,7 +279,6 @@
   
   showPredictOverlayButton.addEventListener('click', () => {
     titlePanel.classList.add("move-up");
-    getStartedText = document.getElementById('getStartedTitleText');
     getStartedText.innerHTML="";
     showPanel(1);
     checkStatus();
@@ -282,7 +286,6 @@
   
   showAboutOverlayButton.addEventListener('click', () => {
     titlePanel.classList.add("move-up");
-    getStartedText = document.getElementById('getStartedTitleText');
     getStartedText.innerHTML="";
     showPanel(14);
   });
@@ -313,7 +316,10 @@
       }
   
     var xhr = new XMLHttpRequest();
+//      xhr.open('POST', 'http://127.0.0.1:5000/calliope/predict', true);
+
     xhr.open('POST', 'https://yg8q32yhcc.execute-api.us-east-1.amazonaws.com/calliope/predict', true);
+
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onreadystatechange = function() {
       if (xhr.readyState === XMLHttpRequest.DONE) {
